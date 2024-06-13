@@ -1,22 +1,20 @@
-name: auto prettier
-
-on:
-  push:
-    paths:
-      - 'site/**'
-
 jobs:
   prettier:
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-      
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.3
-        with:
-          prettier_options: --config ./site/.prettierrc.json --ignore-path ./site/.prettierignore  --write ./site
+    - continue-on-error: true
+      name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: ${{ github.head_ref }}
+    - continue-on-error: true
+      name: Prettify code
+      uses: creyD/prettier_action@v4.3
+      with:
+        prettier_options: --config ./site/.prettierrc.json --ignore-path ./site/.prettierignore  --write
+          ./site
+name: auto prettier
+on:
+  repository_dispatch:
+    types: trigger-ga___auto-prettier.yaml
